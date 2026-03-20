@@ -3,7 +3,9 @@ BYM - Interface Web para Geração de Relatório Gerencial Mensal
 Execute com: streamlit run app.py
 """
 
+import html
 import json
+import re
 import copy
 import sys
 import os
@@ -31,9 +33,9 @@ st.markdown("""
 
     /* ── Variáveis de cor ── */
     :root {
-        --azul-escuro:  #1a2f52;
-        --azul-medio:   #2563a8;
-        --azul-claro:   #dbeafe;
+        --azul-escuro:  #1a2d44;
+        --azul-medio:   #0096c8;
+        --azul-claro:   #e0f5fd;
         --laranja:      #d97706;
         --laranja-dark: #b45309;
         --cinza-bg:     #F4F6F9;
@@ -49,7 +51,7 @@ st.markdown("""
 
     /* ── Header principal ── */
     .main-title {
-        background: linear-gradient(135deg, #1a2f52 0%, #2563a8 60%, #3b7dd8 100%);
+        background: linear-gradient(135deg, #1a2d44 0%, #0096c8 60%, #00aeef 100%);
         color: white;
         padding: 28px 36px;
         border-radius: 12px;
@@ -77,7 +79,7 @@ st.markdown("""
         display: flex;
         align-items: center;
         gap: 10px;
-        background: linear-gradient(90deg, #1a2f52, #2563a8);
+        background: linear-gradient(90deg, #1a2d44, #0096c8);
         color: white;
         padding: 10px 18px;
         border-radius: 8px;
@@ -117,7 +119,7 @@ st.markdown("""
 
     /* ── Botões ── */
     .stButton > button {
-        background: linear-gradient(135deg, #1a2f52, #2563a8);
+        background: linear-gradient(135deg, #1a2d44, #0096c8);
         color: white;
         font-size: 0.95rem;
         font-weight: 600;
@@ -130,7 +132,7 @@ st.markdown("""
         letter-spacing: 0.2px;
     }
     .stButton > button:hover {
-        background: linear-gradient(135deg, #142444, #1a4a8a);
+        background: linear-gradient(135deg, #122036, #007aaa);
         box-shadow: 0 4px 14px rgba(26,47,82,0.40);
         transform: translateY(-1px);
     }
@@ -148,12 +150,12 @@ st.markdown("""
 
     /* ── Botão secundário (Salvar JSON) ── */
     .btn-salvar .stButton > button {
-        background: linear-gradient(135deg, #2563a8, #1a2f52);
-        box-shadow: 0 3px 10px rgba(37,99,168,0.3);
+        background: linear-gradient(135deg, #0096c8, #1a2d44);
+        box-shadow: 0 3px 10px rgba(0,150,200,0.3);
     }
     .btn-salvar .stButton > button:hover {
-        background: linear-gradient(135deg, #1a2f52, #0f1e38);
-        box-shadow: 0 4px 14px rgba(26,47,82,0.4);
+        background: linear-gradient(135deg, #1a2d44, #0f1e30);
+        box-shadow: 0 4px 14px rgba(26,45,68,0.4);
     }
 
     /* ── Info box ── */
@@ -161,7 +163,7 @@ st.markdown("""
         background: linear-gradient(135deg, #EEF4FB, #E3EDF8);
         padding: 14px 18px;
         border-radius: 10px;
-        border-left: 5px solid #2E75B6;
+        border-left: 5px solid #0096c8;
         margin: 4px 0;
         font-size: 0.88rem;
         line-height: 1.7;
@@ -188,7 +190,7 @@ st.markdown("""
     }
     .stTextInput input:focus, .stNumberInput input:focus {
         border-color: var(--azul-medio);
-        box-shadow: 0 0 0 2px rgba(46,117,182,0.15);
+        box-shadow: 0 0 0 2px rgba(0,150,200,0.15);
     }
 
     /* ── Data editor ── */
@@ -200,7 +202,7 @@ st.markdown("""
 
     /* ── Sidebar ── */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #1a2f52 0%, #142444 100%);
+        background: linear-gradient(180deg, #1a2d44 0%, #122036 100%);
     }
 
     /* Textos diretos da sidebar (não widgets) */
@@ -217,6 +219,14 @@ st.markdown("""
     [data-testid="stSidebar"] h2,
     [data-testid="stSidebar"] h3 { color: white !important; font-weight: 700; }
     [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.12) !important; }
+
+    /* ── Logo container ── */
+    [data-testid="stSidebar"] [data-testid="stImage"] {
+        background: white;
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin: 12px 0 4px 0;
+    }
 
     /* File uploader: fundo semitransparente mas texto escuro interno preservado */
     [data-testid="stSidebar"] [data-testid="stFileUploader"] {
@@ -242,7 +252,7 @@ st.markdown("""
         color: rgba(255,255,255,0.85) !important;
     }
     .sidebar-step .num {
-        background: #d97706;
+        background: #0096c8;
         color: white !important;
         border-radius: 50%;
         width: 22px; height: 22px;
@@ -281,7 +291,7 @@ def _str_para_date(valor):
         return valor
     try:
         return datetime.strptime(str(valor)[:10], "%Y-%m-%d").date()
-    except Exception:
+    except ValueError:
         return None
 
 def _date_para_str(valor):
@@ -292,18 +302,20 @@ def _date_para_str(valor):
     return str(valor)
 
 def _nome_arquivo(dados):
-    proj = dados["projeto"]["nome"].replace(" ", "_").replace("(", "").replace(")", "")
+    proj = re.sub(r'[^\w\-. ]', '', dados["projeto"]["nome"]).replace(" ", "_")
     periodo = f"{dados['relatorio']['mes']}-{dados['relatorio']['ano']}"
     return f"BYM_{proj}_{periodo}.xlsx"
 
 # ─────────────────────────── SIDEBAR ─────────────────────────────────────────
 
 with st.sidebar:
+    st.image(
+        os.path.join(os.path.dirname(__file__), "bym_gerenciamento_logo.jpg"),
+        width=200,
+    )
     st.markdown("""
-    <div style="text-align:center; padding: 20px 0 10px 0;">
-        <div style="font-size:3rem; margin-bottom:4px;">🏗️</div>
-        <div style="font-size:1.6rem; font-weight:800; color:white; letter-spacing:-0.5px;">BYM</div>
-        <div style="font-size:0.78rem; color:rgba(255,255,255,0.6); margin-top:2px; font-weight:400;">
+    <div style="text-align:center; padding: 4px 0 8px 0;">
+        <div style="font-size:0.78rem; color:rgba(255,255,255,0.6); font-weight:400;">
             Relatório Gerencial Mensal
         </div>
     </div>
@@ -336,19 +348,38 @@ with st.sidebar:
 if "dados" not in st.session_state:
     st.session_state.dados = carregar_dados_base()
 
+_SCHEMA_KEYS = {
+    "projeto", "relatorio", "controle_prazo", "avanco_fisico", "farol_metas",
+    "metas_proximo_mes", "histograma_mao_obra", "fluxo_caixa", "tabela_aporte",
+    "analise_financeira", "gerenciamento_contratacoes", "controle_mapas_contratacoes",
+    "cronograma_suprimentos", "legalizacao", "datas_marco_prototipo",
+}
+_MAX_UPLOAD_MB = 5
+
 if uploaded:
     try:
-        st.session_state.dados = json.load(uploaded)
-        st.sidebar.success("JSON carregado com sucesso!")
-    except Exception as e:
-        st.sidebar.error(f"Erro ao carregar: {e}")
+        if uploaded.size > _MAX_UPLOAD_MB * 1024 * 1024:
+            st.sidebar.error(f"Arquivo muito grande. Limite: {_MAX_UPLOAD_MB} MB.")
+        else:
+            dados_carregados = json.load(uploaded)
+            if not isinstance(dados_carregados, dict):
+                raise ValueError("O arquivo JSON deve conter um objeto (dicionário).")
+            chaves_faltando = _SCHEMA_KEYS - dados_carregados.keys()
+            if chaves_faltando:
+                raise ValueError(f"JSON inválido: campos ausentes: {', '.join(sorted(chaves_faltando))}")
+            st.session_state.dados = dados_carregados
+            st.sidebar.success("JSON carregado com sucesso!")
+    except json.JSONDecodeError as e:
+        st.sidebar.error(f"Arquivo JSON inválido: {e}")
+    except ValueError as e:
+        st.sidebar.error(str(e))
 
 d = st.session_state.dados  # referência direta
 
 # ─────────────────────────── TÍTULO ──────────────────────────────────────────
 
-proj_nome = d['projeto']['nome'] or "—"
-periodo_str = f"{d['relatorio']['mes']} / {d['relatorio']['ano']}" if d['relatorio']['mes'] else "—"
+proj_nome = html.escape(d['projeto']['nome']) or "—"
+periodo_str = f"{html.escape(d['relatorio']['mes'])} / {html.escape(d['relatorio']['ano'])}" if d['relatorio']['mes'] else "—"
 st.markdown(f"""
 <div class="main-title">
     <div>
@@ -407,9 +438,9 @@ with abas[0]:
         p["padrao"]        = st.text_input("Padrão", p["padrao"])
         p["endereco"]      = st.text_input("Endereço", p["endereco"])
     with c2:
-        p["torres"]        = st.number_input("Torres", min_value=0, value=int(p["torres"]))
-        p["num_fases"]     = st.number_input("Nº de Fases", min_value=0, value=int(p["num_fases"]))
-        p["unidades"]      = st.number_input("Unidades", min_value=0, value=int(p["unidades"]))
+        p["torres"]        = st.number_input("Torres", min_value=0, value=int(p["torres"] or 0))
+        p["num_fases"]     = st.number_input("Nº de Fases", min_value=0, value=int(p["num_fases"] or 0))
+        p["unidades"]      = st.number_input("Unidades", min_value=0, value=int(p["unidades"] or 0))
         p["subsolos_vagas"]= st.text_input("Subsolos e Vagas", p["subsolos_vagas"])
         p["num_pavimentos"]= st.text_input("Nº de Pavimentos", p["num_pavimentos"])
 
@@ -992,10 +1023,10 @@ with col_btn:
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_info:
-    nome_proj   = d['projeto']['nome']      or '<span style="opacity:.5">não informado</span>'
-    periodo_inf = f"{d['relatorio']['mes']} / {d['relatorio']['ano']}" if d['relatorio']['mes'] else '<span style="opacity:.5">—</span>'
-    gerenc      = d['projeto']['gerenciadora'] or '<span style="opacity:.5">não informado</span>'
-    constrt     = d['projeto']['construtora']  or '<span style="opacity:.5">não informado</span>'
+    nome_proj   = html.escape(d['projeto']['nome'])      or '<span style="opacity:.5">não informado</span>'
+    periodo_inf = f"{html.escape(d['relatorio']['mes'])} / {html.escape(d['relatorio']['ano'])}" if d['relatorio']['mes'] else '<span style="opacity:.5">—</span>'
+    gerenc      = html.escape(d['projeto']['gerenciadora']) or '<span style="opacity:.5">não informado</span>'
+    constrt     = html.escape(d['projeto']['construtora'])  or '<span style="opacity:.5">não informado</span>'
     st.markdown(f"""
     <div class="info-box">
         <b>Projeto:</b> {nome_proj}<br>
@@ -1023,5 +1054,5 @@ if gerar:
                 use_container_width=True,
             )
         except Exception as e:
-            st.error(f"❌ Erro ao gerar relatório: {e}")
-            st.exception(e)
+            print(f"[ERRO] Falha ao gerar relatório: {e}", flush=True)
+            st.error("❌ Erro ao gerar o relatório. Verifique se todos os dados estão preenchidos corretamente.")

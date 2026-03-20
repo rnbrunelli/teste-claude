@@ -7,9 +7,19 @@ Uso:
 """
 
 import argparse
+import logging
 import os
 import sys
 from datetime import datetime
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("relatorio_obras.log", encoding="utf-8"),
+    ],
+)
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -38,13 +48,17 @@ def main():
     caminho_dados = os.path.join(base_dir, args.dados)
 
     if not os.path.exists(caminho_dados):
-        print(f"[ERRO] Arquivo de dados não encontrado: {caminho_dados}")
+        logging.error("Arquivo de dados não encontrado: %s", caminho_dados)
         sys.exit(1)
 
     if args.saida:
-        caminho_saida = args.saida
-        if not os.path.isabs(caminho_saida):
-            caminho_saida = os.path.join(base_dir, caminho_saida)
+        caminho_saida = os.path.realpath(
+            args.saida if os.path.isabs(args.saida) else os.path.join(base_dir, args.saida)
+        )
+        saida_real_dir = os.path.dirname(caminho_saida)
+        if not os.path.isdir(saida_real_dir):
+            logging.error("Diretório de saída não existe: %s", saida_real_dir)
+            sys.exit(1)
     else:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         caminho_saida = os.path.join(base_dir, f"Relatorio_Gerencial_{timestamp}.xlsx")
@@ -57,8 +71,10 @@ def main():
         sys.path.insert(0, base_dir)
         from gerador_relatorio import GeradorRelatorio
 
+    logging.info("Gerando relatório: dados=%s | saída=%s", caminho_dados, caminho_saida)
     gerador = GeradorRelatorio(caminho_dados)
     gerador.gerar(caminho_saida)
+    logging.info("Relatório gerado com sucesso: %s", caminho_saida)
 
 
 if __name__ == "__main__":
