@@ -26,23 +26,207 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    /* ── Google Font ── */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    /* ── Variáveis de cor ── */
+    :root {
+        --azul-escuro:  #1F3864;
+        --azul-medio:   #2E75B6;
+        --azul-claro:   #BDD7EE;
+        --laranja:      #ED7D31;
+        --laranja-dark: #c96a1e;
+        --cinza-bg:     #F4F6F9;
+        --cinza-borda:  #DEE2E6;
+        --branco:       #FFFFFF;
+        --texto-escuro: #1a1a2e;
+        --texto-medio:  #495057;
+    }
+
+    /* ── Base ── */
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+    .main .block-container { padding-top: 1.5rem; padding-bottom: 2rem; }
+
+    /* ── Header principal ── */
     .main-title {
-        background: linear-gradient(90deg, #1F3864, #2E75B6);
-        color: white; padding: 20px 30px; border-radius: 8px;
-        margin-bottom: 20px;
+        background: linear-gradient(135deg, #1F3864 0%, #2E75B6 60%, #3a8fd1 100%);
+        color: white;
+        padding: 28px 36px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px rgba(31,56,100,0.25);
+        display: flex;
+        align-items: center;
+        gap: 16px;
     }
+    .main-title h2 { margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.3px; }
+    .main-title p  { margin: 6px 0 0 0; opacity: 0.82; font-size: 0.95rem; font-weight: 400; }
+    .main-title .badge {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 20px;
+        padding: 4px 14px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        white-space: nowrap;
+        margin-left: auto;
+    }
+
+    /* ── Cabeçalhos de seção ── */
     .section-header {
-        background-color: #2E75B6; color: white;
-        padding: 8px 15px; border-radius: 5px;
-        margin: 15px 0 10px 0; font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(90deg, #1F3864, #2E75B6);
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        margin: 20px 0 12px 0;
+        font-weight: 600;
+        font-size: 0.92rem;
+        letter-spacing: 0.2px;
+        box-shadow: 0 2px 8px rgba(31,56,100,0.18);
     }
-    .stButton > button { background-color: #ED7D31; color: white;
-        font-size: 16px; font-weight: bold; border-radius: 6px;
-        padding: 10px 30px; border: none; width: 100%; }
-    .stButton > button:hover { background-color: #c96a1e; }
-    .info-box { background-color: #BDD7EE; padding: 10px 15px;
-        border-radius: 5px; border-left: 4px solid #1F3864;
-        margin: 5px 0; }
+
+    /* ── Tabs ── */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 4px;
+        background: #F0F4F8;
+        padding: 6px;
+        border-radius: 10px;
+        margin-bottom: 4px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 7px;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--texto-medio);
+        border: none;
+        background: transparent;
+    }
+    .stTabs [aria-selected="true"] {
+        background: white !important;
+        color: var(--azul-escuro) !important;
+        font-weight: 700;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+    }
+    .stTabs [data-baseweb="tab-panel"] {
+        padding-top: 16px;
+    }
+
+    /* ── Botões ── */
+    .stButton > button {
+        background: linear-gradient(135deg, #ED7D31, #e06820);
+        color: white;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 11px 28px;
+        border: none;
+        width: 100%;
+        transition: all 0.2s ease;
+        box-shadow: 0 3px 10px rgba(237,125,49,0.35);
+        letter-spacing: 0.2px;
+    }
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #c96a1e, #b85e19);
+        box-shadow: 0 4px 14px rgba(237,125,49,0.45);
+        transform: translateY(-1px);
+    }
+    .stButton > button:active { transform: translateY(0); }
+
+    /* ── Botão secundário (Salvar JSON) ── */
+    .btn-salvar .stButton > button {
+        background: linear-gradient(135deg, #2E75B6, #1F3864);
+        box-shadow: 0 3px 10px rgba(46,117,182,0.3);
+    }
+    .btn-salvar .stButton > button:hover {
+        background: linear-gradient(135deg, #1F3864, #152a4a);
+        box-shadow: 0 4px 14px rgba(31,56,100,0.4);
+    }
+
+    /* ── Info box ── */
+    .info-box {
+        background: linear-gradient(135deg, #EEF4FB, #E3EDF8);
+        padding: 14px 18px;
+        border-radius: 10px;
+        border-left: 5px solid #2E75B6;
+        margin: 4px 0;
+        font-size: 0.88rem;
+        line-height: 1.7;
+        box-shadow: 0 1px 4px rgba(31,56,100,0.08);
+    }
+    .info-box b { color: var(--azul-escuro); }
+
+    /* ── Cards de métricas ── */
+    [data-testid="metric-container"] {
+        background: white;
+        border: 1px solid var(--cinza-borda);
+        border-radius: 10px;
+        padding: 14px 18px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    [data-testid="metric-container"] label { color: var(--texto-medio) !important; font-size: 0.78rem !important; }
+    [data-testid="metric-container"] [data-testid="stMetricValue"] { font-size: 1.4rem !important; font-weight: 700 !important; color: var(--azul-escuro) !important; }
+
+    /* ── Inputs ── */
+    .stTextInput input, .stNumberInput input, .stSelectbox select {
+        border-radius: 7px;
+        border: 1px solid var(--cinza-borda);
+        font-size: 0.9rem;
+    }
+    .stTextInput input:focus, .stNumberInput input:focus {
+        border-color: var(--azul-medio);
+        box-shadow: 0 0 0 2px rgba(46,117,182,0.15);
+    }
+
+    /* ── Data editor ── */
+    [data-testid="stDataFrame"], [data-testid="data-editor"] {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--cinza-borda);
+    }
+
+    /* ── Sidebar ── */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #1F3864 0%, #16304f 100%);
+    }
+    [data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
+    [data-testid="stSidebar"] .stMarkdown p { color: rgba(255,255,255,0.75) !important; font-size: 0.88rem; }
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2 { color: white !important; font-weight: 700; }
+    [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.15) !important; }
+    [data-testid="stSidebar"] .stFileUploader { background: rgba(255,255,255,0.07); border-radius: 8px; padding: 8px; }
+
+    /* ── Sidebar step markers ── */
+    .sidebar-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin: 8px 0;
+        font-size: 0.88rem;
+        color: rgba(255,255,255,0.85) !important;
+    }
+    .sidebar-step .num {
+        background: #ED7D31;
+        color: white !important;
+        border-radius: 50%;
+        width: 22px; height: 22px;
+        min-width: 22px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.72rem; font-weight: 700;
+    }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--cinza-borda); margin: 20px 0; }
+
+    /* ── Spinner ── */
+    .stSpinner > div { border-top-color: var(--laranja) !important; }
+
+    /* ── Alertas ── */
+    .stSuccess { border-radius: 8px; }
+    .stError   { border-radius: 8px; }
+    .stInfo    { border-radius: 8px; font-size: 0.88rem; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -81,23 +265,37 @@ def _nome_arquivo(dados):
 # ─────────────────────────── SIDEBAR ─────────────────────────────────────────
 
 with st.sidebar:
-    st.image("https://img.icons8.com/color/96/000000/construction.png", width=64)
-    st.title("BYM")
-    st.caption("Gerador de Relatório Gerencial Mensal")
-    st.divider()
-    st.markdown("**Como usar:**")
-    st.markdown("1. Preencha os dados em cada aba")
-    st.markdown("2. Clique em **Gerar Relatório**")
-    st.markdown("3. Baixe o arquivo `.xlsx`")
+    st.markdown("""
+    <div style="text-align:center; padding: 20px 0 10px 0;">
+        <div style="font-size:3rem; margin-bottom:4px;">🏗️</div>
+        <div style="font-size:1.6rem; font-weight:800; color:white; letter-spacing:-0.5px;">BYM</div>
+        <div style="font-size:0.78rem; color:rgba(255,255,255,0.6); margin-top:2px; font-weight:400;">
+            Relatório Gerencial Mensal
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     st.divider()
 
+    st.markdown('<div style="font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.5); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:10px;">Como usar</div>', unsafe_allow_html=True)
+    for num, texto in [("1", "Preencha os dados em cada aba"),
+                        ("2", "Clique em <b>Gerar Relatório</b>"),
+                        ("3", "Baixe o arquivo <b>.xlsx</b>")]:
+        st.markdown(f"""
+        <div class="sidebar-step">
+            <div class="num">{num}</div>
+            <div>{texto}</div>
+        </div>""", unsafe_allow_html=True)
+
+    st.divider()
+    st.markdown('<div style="font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.5); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:10px;">Carregar Dados</div>', unsafe_allow_html=True)
     uploaded = st.file_uploader(
-        "Carregar JSON existente",
+        "Arquivo JSON existente",
         type="json",
         help="Carregue um arquivo JSON salvo anteriormente para editar",
+        label_visibility="collapsed",
     )
     st.divider()
-    st.caption("BYM © 2026")
+    st.markdown('<div style="text-align:center; font-size:0.75rem; color:rgba(255,255,255,0.35);">BYM © 2026 — v1.0</div>', unsafe_allow_html=True)
 
 # ─────────────────────────── ESTADO INICIAL ───────────────────────────────────
 
@@ -115,10 +313,15 @@ d = st.session_state.dados  # referência direta
 
 # ─────────────────────────── TÍTULO ──────────────────────────────────────────
 
-st.markdown("""
+proj_nome = d['projeto']['nome'] or "—"
+periodo_str = f"{d['relatorio']['mes']} / {d['relatorio']['ano']}" if d['relatorio']['mes'] else "—"
+st.markdown(f"""
 <div class="main-title">
-    <h2 style="margin:0">🏗️ BYM — Gerador de Relatório Gerencial Mensal</h2>
-    <p style="margin:4px 0 0 0; opacity:0.85">Preencha os dados abaixo e clique em Gerar Relatório</p>
+    <div>
+        <h2 style="margin:0">🏗️ BYM — Relatório Gerencial Mensal</h2>
+        <p style="margin:6px 0 0 0; opacity:0.82">Preencha os dados nas abas abaixo e clique em <strong>Gerar Relatório</strong></p>
+    </div>
+    <div class="badge">📁 {proj_nome} &nbsp;·&nbsp; 📅 {periodo_str}</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -354,7 +557,7 @@ with abas[2]:
     c2.metric("Desvio Acum", f"{av['desvio_acumulado']:.2%}",
               delta=f"{av['desvio_acumulado']:.2%}", delta_color="normal")
     c3.metric("IPF Contratual", f"{av.get('ipf_contratual', 0):.3f}")
-    c4.metric("IPF Meta BYM", f"{av.get('ipf_meta_byw', av.get('ipf_meta_bym', 0)):.3f}")
+    c4.metric("IPF Meta BYM", f"{av.get('ipf_meta_bym', 0):.3f}")
 
 # ════════════════════════════════════════════════════════════════════════════
 # ABA 4 — FAROL DE METAS
@@ -553,7 +756,7 @@ with abas[6]:
         rp = row.get("Realizado %")
         pv = row.get("Previsto Valor") or 0
         pp = row.get("Previsto %") or 0
-        desvio = (rp - pp) if (rv is not None and pd.notna(rv)) else None
+        desvio = (rp - pp) if (rv is not None and pd.notna(rv) and rp is not None and pd.notna(rp)) else None
         novos_meses_fc.append({
             "mes": int(row.get("#") or i + 1),
             "data": _date_para_str(row["Data"]),
@@ -732,39 +935,50 @@ with abas[9]:
 # ════════════════════════════════════════════════════════════════════════════
 # BOTÃO GERAR RELATÓRIO
 # ════════════════════════════════════════════════════════════════════════════
-st.divider()
+st.markdown("<hr>", unsafe_allow_html=True)
 col_btn, col_save, col_info = st.columns([2, 1, 3])
 
 with col_save:
-    if st.button("💾 Salvar JSON", use_container_width=True):
+    st.markdown('<div class="btn-salvar">', unsafe_allow_html=True)
+    salvar_clicado = st.button("💾 Salvar JSON", use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    if salvar_clicado:
         json_str = json.dumps(d, ensure_ascii=False, indent=2, default=str)
         st.download_button(
-            label="Baixar dados_relatorio.json",
+            label="⬇️ Baixar dados_relatorio.json",
             data=json_str.encode("utf-8"),
             file_name="dados_relatorio.json",
             mime="application/json",
+            use_container_width=True,
         )
 
 with col_btn:
     gerar = st.button("📄 Gerar Relatório Excel", use_container_width=True)
 
 with col_info:
+    nome_proj   = d['projeto']['nome']      or '<span style="opacity:.5">não informado</span>'
+    periodo_inf = f"{d['relatorio']['mes']} / {d['relatorio']['ano']}" if d['relatorio']['mes'] else '<span style="opacity:.5">—</span>'
+    gerenc      = d['projeto']['gerenciadora'] or '<span style="opacity:.5">não informado</span>'
+    constrt     = d['projeto']['construtora']  or '<span style="opacity:.5">não informado</span>'
     st.markdown(f"""
     <div class="info-box">
-    <b>Projeto:</b> {d['projeto']['nome']}<br>
-    <b>Período:</b> {d['relatorio']['mes']}-{d['relatorio']['ano']}<br>
-    <b>Gerenciadora:</b> {d['projeto']['gerenciadora']}
+        <b>Projeto:</b> {nome_proj}<br>
+        <b>Período:</b> {periodo_inf}<br>
+        <b>Construtora:</b> {constrt}<br>
+        <b>Gerenciadora:</b> {gerenc}
     </div>""", unsafe_allow_html=True)
 
 if gerar:
-    with st.spinner("Gerando relatório..."):
+    with st.spinner("⏳ Gerando relatório, aguarde..."):
         try:
             log_msgs = []
             gerador = GeradorRelatorio(copy.deepcopy(d))
             xlsx_bytes = gerador.gerar_bytes(log_fn=log_msgs.append)
 
             nome_arquivo = _nome_arquivo(d)
-            st.success(f"Relatório gerado com sucesso! ({len(xlsx_bytes)//1024} KB)")
+            tamanho_kb = len(xlsx_bytes) // 1024
+
+            st.success(f"✅ Relatório gerado com sucesso! Tamanho: **{tamanho_kb} KB**")
             st.download_button(
                 label=f"⬇️ Baixar {nome_arquivo}",
                 data=xlsx_bytes,
@@ -773,5 +987,5 @@ if gerar:
                 use_container_width=True,
             )
         except Exception as e:
-            st.error(f"Erro ao gerar relatório: {e}")
+            st.error(f"❌ Erro ao gerar relatório: {e}")
             st.exception(e)
