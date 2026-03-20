@@ -31,16 +31,16 @@ st.markdown("""
 
     /* ── Variáveis de cor ── */
     :root {
-        --azul-escuro:  #1F3864;
-        --azul-medio:   #2E75B6;
-        --azul-claro:   #BDD7EE;
-        --laranja:      #ED7D31;
-        --laranja-dark: #c96a1e;
+        --azul-escuro:  #1a2f52;
+        --azul-medio:   #2563a8;
+        --azul-claro:   #dbeafe;
+        --laranja:      #d97706;
+        --laranja-dark: #b45309;
         --cinza-bg:     #F4F6F9;
-        --cinza-borda:  #DEE2E6;
+        --cinza-borda:  #e2e8f0;
         --branco:       #FFFFFF;
-        --texto-escuro: #1a1a2e;
-        --texto-medio:  #495057;
+        --texto-escuro: #0f172a;
+        --texto-medio:  #475569;
     }
 
     /* ── Base ── */
@@ -49,7 +49,7 @@ st.markdown("""
 
     /* ── Header principal ── */
     .main-title {
-        background: linear-gradient(135deg, #1F3864 0%, #2E75B6 60%, #3a8fd1 100%);
+        background: linear-gradient(135deg, #1a2f52 0%, #2563a8 60%, #3b7dd8 100%);
         color: white;
         padding: 28px 36px;
         border-radius: 12px;
@@ -77,7 +77,7 @@ st.markdown("""
         display: flex;
         align-items: center;
         gap: 10px;
-        background: linear-gradient(90deg, #1F3864, #2E75B6);
+        background: linear-gradient(90deg, #1a2f52, #2563a8);
         color: white;
         padding: 10px 18px;
         border-radius: 8px;
@@ -117,7 +117,7 @@ st.markdown("""
 
     /* ── Botões ── */
     .stButton > button {
-        background: linear-gradient(135deg, #ED7D31, #e06820);
+        background: linear-gradient(135deg, #1a2f52, #2563a8);
         color: white;
         font-size: 0.95rem;
         font-weight: 600;
@@ -126,24 +126,34 @@ st.markdown("""
         border: none;
         width: 100%;
         transition: all 0.2s ease;
-        box-shadow: 0 3px 10px rgba(237,125,49,0.35);
+        box-shadow: 0 3px 10px rgba(26,47,82,0.30);
         letter-spacing: 0.2px;
     }
     .stButton > button:hover {
-        background: linear-gradient(135deg, #c96a1e, #b85e19);
-        box-shadow: 0 4px 14px rgba(237,125,49,0.45);
+        background: linear-gradient(135deg, #142444, #1a4a8a);
+        box-shadow: 0 4px 14px rgba(26,47,82,0.40);
         transform: translateY(-1px);
     }
     .stButton > button:active { transform: translateY(0); }
 
+    /* ── Botão de ação principal (Gerar Relatório) ── */
+    .btn-gerar .stButton > button {
+        background: linear-gradient(135deg, #d97706, #b45309);
+        box-shadow: 0 3px 10px rgba(217,119,6,0.35);
+    }
+    .btn-gerar .stButton > button:hover {
+        background: linear-gradient(135deg, #b45309, #92400e);
+        box-shadow: 0 4px 14px rgba(217,119,6,0.45);
+    }
+
     /* ── Botão secundário (Salvar JSON) ── */
     .btn-salvar .stButton > button {
-        background: linear-gradient(135deg, #2E75B6, #1F3864);
-        box-shadow: 0 3px 10px rgba(46,117,182,0.3);
+        background: linear-gradient(135deg, #2563a8, #1a2f52);
+        box-shadow: 0 3px 10px rgba(37,99,168,0.3);
     }
     .btn-salvar .stButton > button:hover {
-        background: linear-gradient(135deg, #1F3864, #152a4a);
-        box-shadow: 0 4px 14px rgba(31,56,100,0.4);
+        background: linear-gradient(135deg, #1a2f52, #0f1e38);
+        box-shadow: 0 4px 14px rgba(26,47,82,0.4);
     }
 
     /* ── Info box ── */
@@ -190,13 +200,37 @@ st.markdown("""
 
     /* ── Sidebar ── */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #1F3864 0%, #16304f 100%);
+        background: linear-gradient(180deg, #1a2f52 0%, #142444 100%);
     }
-    [data-testid="stSidebar"] * { color: rgba(255,255,255,0.9) !important; }
-    [data-testid="stSidebar"] .stMarkdown p { color: rgba(255,255,255,0.75) !important; font-size: 0.88rem; }
-    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2 { color: white !important; font-weight: 700; }
-    [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.15) !important; }
-    [data-testid="stSidebar"] .stFileUploader { background: rgba(255,255,255,0.07); border-radius: 8px; padding: 8px; }
+
+    /* Textos diretos da sidebar (não widgets) */
+    [data-testid="stSidebar"] > div > div > div p,
+    [data-testid="stSidebar"] > div > div > div span,
+    [data-testid="stSidebar"] > div > div > div label,
+    [data-testid="stSidebar"] .stMarkdown p,
+    [data-testid="stSidebar"] .stMarkdown span,
+    [data-testid="stSidebar"] .stMarkdown div {
+        color: rgba(255,255,255,0.80) !important;
+        font-size: 0.88rem;
+    }
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3 { color: white !important; font-weight: 700; }
+    [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.12) !important; }
+
+    /* File uploader: fundo semitransparente mas texto escuro interno preservado */
+    [data-testid="stSidebar"] [data-testid="stFileUploader"] {
+        background: rgba(255,255,255,0.92);
+        border-radius: 10px;
+        padding: 10px;
+    }
+    [data-testid="stSidebar"] [data-testid="stFileUploader"] * {
+        color: #1a2f52 !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stFileUploader"] small,
+    [data-testid="stSidebar"] [data-testid="stFileUploader"] span {
+        color: #4a6080 !important;
+    }
 
     /* ── Sidebar step markers ── */
     .sidebar-step {
@@ -208,7 +242,7 @@ st.markdown("""
         color: rgba(255,255,255,0.85) !important;
     }
     .sidebar-step .num {
-        background: #ED7D31;
+        background: #d97706;
         color: white !important;
         border-radius: 50%;
         width: 22px; height: 22px;
@@ -232,7 +266,7 @@ st.markdown("""
 
 # ─────────────────────────── CARREGA DADOS BASE ──────────────────────────────
 
-@st.cache_data
+@st.cache_data(ttl=0)
 def carregar_dados_base():
     caminho = os.path.join(os.path.dirname(__file__), "dados_relatorio.json")
     with open(caminho, encoding="utf-8") as f:
@@ -953,7 +987,9 @@ with col_save:
         )
 
 with col_btn:
+    st.markdown('<div class="btn-gerar">', unsafe_allow_html=True)
     gerar = st.button("📄 Gerar Relatório Excel", use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 with col_info:
     nome_proj   = d['projeto']['nome']      or '<span style="opacity:.5">não informado</span>'

@@ -3,17 +3,17 @@
     "nome": "",
     "incorporadora": "",
     "construtora": "",
-    "gerenciadora": "BYM",
+    "gerenciadora": "",
     "padrao": "",
     "endereco": "",
     "area_terreno": 0.0,
-    "area_terreno_referencia": "Alvará de Execução",
+    "area_terreno_referencia": "",
     "area_construida": 0.0,
-    "area_construida_referencia": "Alvará de Execução",
+    "area_construida_referencia": "",
     "area_privativa": 0.0,
     "area_privativa_referencia": "",
-    "torres": 1,
-    "num_fases": 1,
+    "torres": 0,
+    "num_fases": 0,
     "unidades": 0,
     "subsolos_vagas": "",
     "num_pavimentos": "",
@@ -23,14 +23,14 @@
   },
   "relatorio": {
     "mes": "JANEIRO",
-    "ano": "26",
-    "data_relatorio": "2026-01-01"
+    "ano": "",
+    "data_relatorio": null
   },
   "controle_prazo": {
-    "data_inicio_contratual": "2026-01-01",
-    "data_termino_contratual": "2026-01-01",
-    "data_inicio_tendencia": "2026-01-01",
-    "data_termino_tendencia": "2026-01-01",
+    "data_inicio_contratual": null,
+    "data_termino_contratual": null,
+    "data_inicio_tendencia": null,
+    "data_termino_tendencia": null,
     "qtde_meses_contratual": 0.0,
     "qtde_meses_tendencia": 0.0,
     "desvio_dias": 0,
@@ -54,7 +54,7 @@
   "farol_metas": [],
   "metas_proximo_mes": [],
   "histograma_mao_obra": {
-    "mes_referencia": "2026-01-01",
+    "mes_referencia": null,
     "empresas": []
   },
   "fluxo_caixa": {
@@ -72,9 +72,9 @@
   "controle_mapas_contratacoes": [],
   "cronograma_suprimentos": [],
   "legalizacao": {
-    "inicio_obra": "2026-01-01",
-    "mes_habitese": "2026-01-01",
-    "mes_termino": "2026-01-01",
+    "inicio_obra": null,
+    "mes_habitese": null,
+    "mes_termino": null,
     "documentos_iniciais": []
   },
   "datas_marco_prototipo": []
