@@ -170,9 +170,9 @@ with abas[0]:
         p["padrao"]        = st.text_input("Padrão", p["padrao"])
         p["endereco"]      = st.text_input("Endereço", p["endereco"])
     with c2:
-        p["torres"]        = st.number_input("Torres", min_value=1, value=int(p["torres"]))
-        p["num_fases"]     = st.number_input("Nº de Fases", min_value=1, value=int(p["num_fases"]))
-        p["unidades"]      = st.number_input("Unidades", min_value=1, value=int(p["unidades"]))
+        p["torres"]        = st.number_input("Torres", min_value=0, value=int(p["torres"]))
+        p["num_fases"]     = st.number_input("Nº de Fases", min_value=0, value=int(p["num_fases"]))
+        p["unidades"]      = st.number_input("Unidades", min_value=0, value=int(p["unidades"]))
         p["subsolos_vagas"]= st.text_input("Subsolos e Vagas", p["subsolos_vagas"])
         p["num_pavimentos"]= st.text_input("Nº de Pavimentos", p["num_pavimentos"])
 
